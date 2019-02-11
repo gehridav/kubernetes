@@ -1,0 +1,32 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: ClusterIssuer
+metadata:
+    name: letsencrypt-staging-nadineunddavid-ch
+spec:
+    acme:
+        # The ACME server URL
+        server: https://acme-staging-v02.api.letsencrypt.org/directory
+        # Email address used for ACME registration
+        email: gehrig.david@gmail.com
+        # Name of a secret used to store the ACME account private key
+        privateKeySecretRef:
+            name: letsencrypt-staging-nadineunddavid-ch
+        # Enable the HTTP-01 challenge provider
+        dns01:
+            providers:
+                - name: azure-staging-nadineunddavid-ch
+                  azuredns:
+                    # Service principal clientId (also called appId)
+                    clientID: 1240c5fe-954c-45c1-86c1-3fcacb70a1ca
+                    # A secretKeyRef to a service principal ClientSecret (password)
+                    # ref: https://docs.microsoft.com/en-us/azure/container-service/kubernetes/container-service-kubernetes-service-principal
+                    clientSecretSecretRef:
+                        name: azuredns-config
+                        key: CLIENT_SECRET
+                    # Azure subscription Id
+                    subscriptionID: 54ee4b6f-d54d-4d23-b525-e8c923429665
+                    # Azure AD tenant Id
+                    tenantID: c204fc41-7599-4847-8752-605b1220172f
+                    # ResourceGroup name where dns zone is provisioned
+                    resourceGroupName: nadineunddavid.ch
+                    hostedZoneName: nadineunddavid.ch
