@@ -1,0 +1,11 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: internal-ip-restriction
+config: 
+  allow:
+  - 192.168.0.0/24
+  - 10.8.0.0/24
+  deny:
+  - 192.168.0.1
+plugin: ip-restriction
