@@ -1,4 +1,4 @@
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
     name: letsencrypt-staging-davidgehrig-com
@@ -12,21 +12,23 @@ spec:
         privateKeySecretRef:
             name: letsencrypt-staging-davidgehrig-com
         # Enable the HTTP-01 challenge provider
-        dns01:
-            providers:
-                - name: azure-staging-davidgehrig-com
-                  azuredns:
-                    # Service principal clientId (also called appId)
-                    clientID: 1240c5fe-954c-45c1-86c1-3fcacb70a1ca
-                    # A secretKeyRef to a service principal ClientSecret (password)
-                    # ref: https://docs.microsoft.com/en-us/azure/container-service/kubernetes/container-service-kubernetes-service-principal
-                    clientSecretSecretRef:
-                        name: azuredns-config
-                        key: CLIENT_SECRET
-                    # Azure subscription Id
-                    subscriptionID: 54ee4b6f-d54d-4d23-b525-e8c923429665
-                    # Azure AD tenant Id
-                    tenantID: c204fc41-7599-4847-8752-605b1220172f
-                    # ResourceGroup name where dns zone is provisioned
-                    resourceGroupName: davidgehrig.com
-                    hostedZoneName: davidgehrig.com
+        solvers:
+        - dns01:
+            azureDNS:
+                # Service principal clientId (also called appId)
+                clientID: 1240c5fe-954c-45c1-86c1-3fcacb70a1ca
+                # A secretKeyRef to a service principal ClientSecret (password)
+                # ref: https://docs.microsoft.com/en-us/azure/container-service/kubernetes/container-service-kubernetes-service-principal
+                clientSecretSecretRef:
+                    name: azuredns-config
+                    key: client-secret
+                # Azure subscription Id
+                subscriptionID: 54ee4b6f-d54d-4d23-b525-e8c923429665
+                # Azure AD tenant Id
+                tenantID: c204fc41-7599-4847-8752-605b1220172f
+                # ResourceGroup name where dns zone is provisioned
+                resourceGroupName: davidgehrig.com
+                hostedZoneName: davidgehrig.com
+          selector:
+              dnsZones:
+              - 'davidgehrig.com'                    
